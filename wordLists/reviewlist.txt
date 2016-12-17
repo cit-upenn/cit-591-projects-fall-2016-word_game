@@ -1,8 +1,7 @@
-programmer
-penguin
-elephant
-rabbit
-moose
 water
-fish
+egg
+icecream
+pear
+beverage
 bread
+owl

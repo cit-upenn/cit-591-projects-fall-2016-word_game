@@ -6,9 +6,12 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import tools.ReviewList;
+
 public class CongratulationsPanel extends JPanel{
 	Image backgroundImage;
 	JButton playGame, gotoReviewList, homePage, nextLesson;
+	ReviewList reviewList; 
 	
 	public CongratulationsPanel(Image image) throws Exception{
 		backgroundImage = image;
@@ -19,27 +22,30 @@ public class CongratulationsPanel extends JPanel{
 	}
 
 	private void initButtons() throws IOException {
+		int w = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int h = Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		Image image;
 		image = getImage("playgame");
 		playGame = new JButton(new ImageIcon(image));
 		setButton(playGame);
-		playGame.setBounds(530, 270, 250, 80);
+		playGame.setBounds((int) (w*0.21), (int)(h*0.22), (int) (w*0.3), (int) (h*0.08));
 		
 		image = getImage("gotoreviewlist");
 		gotoReviewList = new JButton(new ImageIcon(image));
 		setButton(gotoReviewList);
-		gotoReviewList.setBounds(530, 370, 250, 80);
+		gotoReviewList.setBounds((int) (w*0.21), (int)(h*0.32), (int) (w*0.3), (int) (h*0.08));
 		
 		image = getImage("homepage");
 		homePage = new JButton(new ImageIcon(image));
 		setButton(homePage);
-		homePage.setBounds(530, 470, 250, 80);
+		homePage.setBounds((int) (w*0.21), (int)(h*0.42), (int) (w*0.3), (int) (h*0.08));
 		
 		image = getImage("nextlesson");
 		nextLesson = new JButton(new ImageIcon(image));
 		setButton(nextLesson);
-		nextLesson.setBounds(530, 570, 250, 80);
+		nextLesson.setBounds((int) (w*0.21), (int)(h*0.52), (int) (w*0.3), (int) (h*0.08));
+	
 	}
 	
 	private Image getImage (String imageName) throws IOException {
@@ -76,14 +82,23 @@ public class CongratulationsPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Lesson.lessonNum = 0;
 				try {
-					Lesson.initLabels();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					reviewList = new ReviewList("wordLists/reviewlist.txt");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				} 
+				if (reviewList.getList().isEmpty()) {
+					InitFrame.oops.setVisible(true);
+				}else {
+					Lesson.lessonNum = 0;
+					try {
+						Lesson.initLabels();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					InitFrame.lesson.setVisible(true);
 				}
-				InitFrame.lesson.setVisible(true);
 			}
 		});	
 		

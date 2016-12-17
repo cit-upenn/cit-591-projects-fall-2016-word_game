@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,10 +14,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import tools.ReviewList;
+
 
 public class MainMenu extends JPanel {
 	JButton watchLessonsButton, playGamesButton, reviewButton, exitButton;
 	Image backgroundImage;
+	ReviewList reviewList; 
 
 	public MainMenu(Image image) throws Exception {
 		backgroundImage = image;
@@ -28,27 +32,31 @@ public class MainMenu extends JPanel {
 
 
 	private void initButtons() throws IOException {
+		int w = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int h = Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		Image image;
 		image = getImage("watchLessons");
 		watchLessonsButton = new JButton(new ImageIcon(image));
 		setButton(watchLessonsButton);
-		watchLessonsButton.setBounds(530, 270, 250, 80);
+		watchLessonsButton.setBounds((int) (w*0.21), (int)(h*0.22), (int) (w*0.3), (int) (h*0.08));
 		
 		image = getImage("playGames");
 		playGamesButton = new JButton(new ImageIcon(image));
 		setButton(playGamesButton);
-		playGamesButton.setBounds(530, 370, 250, 80);
+		playGamesButton.setBounds((int) (w*0.21), (int)(h*0.32), (int) (w*0.3), (int) (h*0.08));
+		
 		
 		image = getImage("review");
 		reviewButton = new JButton(new ImageIcon(image));
 		setButton(reviewButton);
-		reviewButton.setBounds(530, 470, 250, 80);
+		reviewButton.setBounds((int) (w*0.21), (int)(h*0.42), (int) (w*0.3), (int) (h*0.08));
+		
 		
 		image = getImage("exit");
 		exitButton = new JButton(new ImageIcon(image));
 		setButton(exitButton);
-		exitButton.setBounds(530, 570, 250, 80);
+		exitButton.setBounds((int) (w*0.21), (int)(h*0.52), (int) (w*0.3), (int) (h*0.08));
 	}
 	
 	private Image getImage (String imageName) throws IOException {
@@ -85,14 +93,22 @@ public class MainMenu extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Lesson.lessonNum = 0;
 				try {
-					Lesson.initLabels();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					reviewList = new ReviewList("wordLists/reviewlist.txt");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				} 
+				if (reviewList.getList().isEmpty()) {
+					InitFrame.oops.setVisible(true);
+				}else {
+					Lesson.lessonNum = 0;
+					try {
+						Lesson.initLabels();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					InitFrame.lesson.setVisible(true);
 				}
-				InitFrame.lesson.setVisible(true);
 			}
 		});	
 		
